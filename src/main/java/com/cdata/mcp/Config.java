@@ -36,6 +36,7 @@ public class Config {
   private Driver driver;
   private String defCatalog;
   private String defSchema;
+  private ConnectionManager connectionManager;
 
   public void load(String filepath) throws IOException {
     try (FileInputStream fis = new FileInputStream(filepath)) {
@@ -48,26 +49,71 @@ public class Config {
     if (isNullOrEmpty(getPrefix())) {
       errors.println("The '" + PREFIX + "' option is missing");
       result = false;
+    } else {
+      // Validate prefix for security
+      try {
+        SecurityValidator.validateStringInput(getPrefix(), PREFIX, 50);
+      } catch (SecurityException ex) {
+        errors.println("Security validation failed for " + PREFIX + ": " + ex.getMessage());
+        result = false;
+      }
     }
 
     if (isNullOrEmpty(getDriver())) {
       errors.println("The '" + DRIVER + "' option is missing");
       result = false;
+    } else {
+      // Validate driver class is allowlisted
+      try {
+        SecurityValidator.validateDriverClass(getDriver());
+      } catch (SecurityException ex) {
+        errors.println("Security validation failed for " + DRIVER + ": " + ex.getMessage());
+        result = false;
+      }
     }
 
     if (isNullOrEmpty(getDriverJar())) {
       errors.println("The '" + DRIVER_JAR + "' option is missing");
       result = false;
-    } else if (!verifyDriverLoad(errors)) {
-      result = false;
+    } else {
+      // Validate JAR file security
+      try {
+        SecurityValidator.validateJarFile(getDriverJar());
+      } catch (SecurityException ex) {
+        errors.println("Security validation failed for " + DRIVER_JAR + ": " + ex.getMessage());
+        result = false;
+      }
+      if (result && !verifyDriverLoad(errors)) {
+        result = false;
+      }
     }
 
     if (isNullOrEmpty(getJdbcUrl())) {
       errors.println("The '" + JDBC_URL + "' option is missing");
       result = false;
-    } else if (result && !verifyJdbcUrl(errors)) {
-      result = false;
+    } else {
+      // Validate JDBC URL for security
+      try {
+        SecurityValidator.validateStringInput(getJdbcUrl(), JDBC_URL, 1000);
+      } catch (SecurityException ex) {
+        errors.println("Security validation failed for " + JDBC_URL + ": " + ex.getMessage());
+        result = false;
+      }
+      if (result && !verifyJdbcUrl(errors)) {
+        result = false;
+      }
     }
+    
+    // Validate log file path if specified
+    if (!isNullOrEmpty(getLogFile())) {
+      try {
+        SecurityValidator.validateLogPath(getLogFile());
+      } catch (SecurityException ex) {
+        errors.println("Security validation failed for " + LOG_FILE + ": " + ex.getMessage());
+        result = false;
+      }
+    }
+    
     return result;
   }
 
@@ -134,6 +180,39 @@ public class Config {
 
   public Connection newConnection() throws SQLException {
     return this.driver.connect(this.getJdbcUrl(), new Properties());
+  }
+  
+  /**
+   * Gets a managed connection with security controls and resource limits
+   * @param clientId Identifier for the requesting client
+   * @return A managed database connection
+   * @throws SQLException if connection fails or limits are exceeded
+   */
+  public ManagedConnection getManagedConnection(String clientId) throws SQLException {
+    if (connectionManager == null) {
+      connectionManager = new ConnectionManager(this);
+    }
+    return connectionManager.getConnection(clientId);
+  }
+  
+  /**
+   * Gets the connection manager instance
+   * @return The connection manager
+   */
+  public ConnectionManager getConnectionManager() {
+    if (connectionManager == null) {
+      connectionManager = new ConnectionManager(this);
+    }
+    return connectionManager;
+  }
+  
+  /**
+   * Shuts down the connection manager
+   */
+  public void shutdown() {
+    if (connectionManager != null) {
+      connectionManager.shutdown();
+    }
   }
 
   private boolean verifyDriverLoad(PrintStream errors) {

@@ -85,7 +85,7 @@ public class RunQueryTool implements ITool {
     
     this.logger.info("RunQueryTool - executing validated SELECT query");
     try {
-      try (Connection cn = config.newConnection()) {
+      try (ManagedConnection cn = config.getManagedConnection("RunQueryTool")) {
         List<McpSchema.Content> content = new ArrayList<>();
         String csv = queryToCsv(cn, sql);
 
@@ -97,7 +97,7 @@ public class RunQueryTool implements ITool {
         return new McpSchema.CallToolResult(content, false);
       }
     } catch ( Exception ex ) {
-      throw new RuntimeException("ERROR: " + ex.getMessage());
+      throw new RuntimeException("Database operation failed: " + sanitizeErrorMessage(ex.getMessage()));
     }
   }
 
@@ -173,6 +173,33 @@ public class RunQueryTool implements ITool {
     }
     
     return result.toString();
+  }
+
+  /**
+   * Sanitizes error messages to prevent information disclosure
+   * @param errorMessage The original error message
+   * @return Sanitized error message
+   */
+  private String sanitizeErrorMessage(String errorMessage) {
+    if (errorMessage == null) {
+      return "Unknown database error";
+    }
+    
+    // Remove potentially sensitive information from error messages
+    String sanitized = errorMessage
+        .replaceAll("password=[^\\s;,]+", "password=****")
+        .replaceAll("token=[^\\s;,]+", "token=****")
+        .replaceAll("secret=[^\\s;,]+", "secret=****")
+        .replaceAll("jdbc:[^\\s;,]+", "jdbc:****")
+        .replaceAll("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b", "***.***.***.**")  // IP addresses
+        .replaceAll("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b", "****@****.***");  // Email addresses
+    
+    // Limit error message length
+    if (sanitized.length() > 200) {
+      sanitized = sanitized.substring(0, 200) + "... (truncated)";
+    }
+    
+    return sanitized;
   }
 
 }
