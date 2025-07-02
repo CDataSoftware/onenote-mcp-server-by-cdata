@@ -29,6 +29,18 @@ public class Config {
   // Authentication configuration
   private static final String AUTH_REQUIRED = "AuthRequired";
   private static final String SESSION_TIMEOUT_MINUTES = "SessionTimeoutMinutes";
+  
+  // TLS configuration
+  private static final String TLS_ENABLED = "TlsEnabled";
+  private static final String HTTPS_PORT = "HttpsPort";
+  private static final String KEYSTORE_PATH = "KeystorePath";
+  private static final String KEYSTORE_PASSWORD = "KeystorePassword";
+  private static final String KEYSTORE_TYPE = "KeystoreType";
+  private static final String TRUSTSTORE_PATH = "TruststorePath";
+  private static final String TRUSTSTORE_PASSWORD = "TruststorePassword";
+  private static final String TRUSTSTORE_TYPE = "TruststoreType";
+  private static final String CLIENT_AUTH_REQUIRED = "ClientAuthRequired";
+  private static final String CLIENT_AUTH_WANTED = "ClientAuthWanted";
 
   // following properties will be discovered dynamically from driver
   private static final String ID_QUOTE_OPEN_CHAR = "IDENTIFIER_QUOTE_OPEN_CHAR";
@@ -42,6 +54,7 @@ public class Config {
   private String defSchema;
   private ConnectionManager connectionManager;
   private com.cdata.mcp.auth.AuthenticationManager authenticationManager;
+  private com.cdata.mcp.transport.TlsConfiguration tlsConfiguration;
 
   public void load(String filepath) throws IOException {
     try (FileInputStream fis = new FileInputStream(filepath)) {
@@ -194,6 +207,54 @@ public class Config {
     } catch (NumberFormatException e) {
       return 60; // Default fallback
     }
+  }
+  
+  /**
+   * Gets the TLS configuration
+   * @return TLS configuration
+   */
+  public com.cdata.mcp.transport.TlsConfiguration getTlsConfiguration() {
+    if (tlsConfiguration == null) {
+      tlsConfiguration = createTlsConfiguration();
+    }
+    return tlsConfiguration;
+  }
+  
+  /**
+   * Creates TLS configuration from properties
+   * @return TLS configuration
+   */
+  private com.cdata.mcp.transport.TlsConfiguration createTlsConfiguration() {
+    com.cdata.mcp.transport.TlsConfiguration config = new com.cdata.mcp.transport.TlsConfiguration();
+    
+    // Basic TLS settings
+    config.setTlsEnabled(Boolean.parseBoolean(this.props.getProperty(TLS_ENABLED, "false")));
+    
+    if (config.isTlsEnabled()) {
+      // HTTPS port
+      String portStr = this.props.getProperty(HTTPS_PORT, "8443");
+      try {
+        config.setHttpsPort(Integer.parseInt(portStr));
+      } catch (NumberFormatException e) {
+        config.setHttpsPort(8443);
+      }
+      
+      // Keystore settings
+      config.setKeystorePath(this.props.getProperty(KEYSTORE_PATH));
+      config.setKeystorePassword(this.props.getProperty(KEYSTORE_PASSWORD));
+      config.setKeystoreType(this.props.getProperty(KEYSTORE_TYPE, "PKCS12"));
+      
+      // Truststore settings (optional)
+      config.setTruststorePath(this.props.getProperty(TRUSTSTORE_PATH));
+      config.setTruststorePassword(this.props.getProperty(TRUSTSTORE_PASSWORD));
+      config.setTruststoreType(this.props.getProperty(TRUSTSTORE_TYPE, "PKCS12"));
+      
+      // Client authentication
+      config.setClientAuthRequired(Boolean.parseBoolean(this.props.getProperty(CLIENT_AUTH_REQUIRED, "false")));
+      config.setClientAuthWanted(Boolean.parseBoolean(this.props.getProperty(CLIENT_AUTH_WANTED, "false")));
+    }
+    
+    return config;
   }
 
   public String quoteIdentifier(String id) {
