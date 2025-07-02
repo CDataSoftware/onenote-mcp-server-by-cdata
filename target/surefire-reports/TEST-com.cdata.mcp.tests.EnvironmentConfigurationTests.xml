@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.06" tests="17" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="23"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/test-classes:/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/classes:/Users/ravikalla/.m2/repository/io/modelcontextprotocol/sdk/mcp/0.8.1/mcp-0.8.1.jar:/Users/ravikalla/.m2/repository/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.17.0/jackson-databind-2.17.0.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.17.0/jackson-annotations-2.17.0.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.0/jackson-core-2.17.0.jar:/Users/ravikalla/.m2/repository/net/bytebuddy/byte-buddy/1.14.9/byte-buddy-1.14.9.jar:/Users/ravikalla/.m2/repository/io/projectreactor/reactor-core/3.7.0/reactor-core-3.7.0.jar:/Users/ravikalla/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-server/12.0.16/jetty-server-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-http/12.0.16/jetty-http-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-io/12.0.16/jetty-io-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/ee10/jetty-ee10-servlet/12.0.16/jetty-ee10-servlet-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-security/12.0.16/jetty-security-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-session/12.0.16/jetty-session-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-util/12.0.16/jetty-util-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-server/12.0.16/jetty-http2-server-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-common/12.0.16/jetty-http2-common-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-hpack/12.0.16/jetty-http2-hpack-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-alpn-server/12.0.16/jetty-alpn-server-12.0.16.jar:/Users/ravikalla/.m2/repository/jakarta/servlet/jakarta.servlet-api/6.0.0/jakarta.servlet-api-6.0.0.jar:/Users/ravikalla/.m2/repository/org/slf4j/slf4j-simple/2.0.16/slf4j-simple-2.0.16.jar:/Users/ravikalla/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/ravikalla/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="java.vm.specification.version" value="23"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home/lib"/>
+    <property name="sun.java.command" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/surefire/surefirebooter-20250702140529037_3.jar /Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/surefire 2025-07-02T14-05-29_000-jvmRun1 surefire-20250702140529037_1tmp surefire_0-20250702140529037_2tmp"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/test-classes:/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/classes:/Users/ravikalla/.m2/repository/io/modelcontextprotocol/sdk/mcp/0.8.1/mcp-0.8.1.jar:/Users/ravikalla/.m2/repository/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.17.0/jackson-databind-2.17.0.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.17.0/jackson-annotations-2.17.0.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.0/jackson-core-2.17.0.jar:/Users/ravikalla/.m2/repository/net/bytebuddy/byte-buddy/1.14.9/byte-buddy-1.14.9.jar:/Users/ravikalla/.m2/repository/io/projectreactor/reactor-core/3.7.0/reactor-core-3.7.0.jar:/Users/ravikalla/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-server/12.0.16/jetty-server-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-http/12.0.16/jetty-http-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-io/12.0.16/jetty-io-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/ee10/jetty-ee10-servlet/12.0.16/jetty-ee10-servlet-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-security/12.0.16/jetty-security-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-session/12.0.16/jetty-session-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-util/12.0.16/jetty-util-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-server/12.0.16/jetty-http2-server-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-common/12.0.16/jetty-http2-common-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-hpack/12.0.16/jetty-http2-hpack-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-alpn-server/12.0.16/jetty-alpn-server-12.0.16.jar:/Users/ravikalla/.m2/repository/jakarta/servlet/jakarta.servlet-api/6.0.0/jakarta.servlet-api-6.0.0.jar:/Users/ravikalla/.m2/repository/org/slf4j/slf4j-simple/2.0.16/slf4j-simple-2.0.16.jar:/Users/ravikalla/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/ravikalla/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/Users/ravikalla"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2024-10-15"/>
+    <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="apple.awt.application.name" value="ForkedBooter"/>
+    <property name="surefire.real.class.path" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/surefire/surefirebooter-20250702140529037_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.runtime.version" value="23.0.1+11-39"/>
+    <property name="user.name" value="ravikalla"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="15.5"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="localRepository" value="/Users/ravikalla/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="/var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/"/>
+    <property name="java.version" value="23.0.1"/>
+    <property name="user.dir" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official"/>
+    <property name="os.arch" value="aarch64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/ravikalla/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="23.0.1+11-39"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.class.version" value="67.0"/>
+  </properties>
+  <testcase name="testClearProperties" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.038">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=5cMPZN4HVbdI//SSZSxMhl/0uIkBTUJgst3BwZaNJIQ=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit3205802250349387408/test-config.properties
+]]></system-err>
+  </testcase>
+  <testcase name="testBasicPropertyLoading" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.001">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=yXuR8TKh4U6+P28ZhCSuBhAGgKA1EMpqHc2ru3EtWdk=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit15166575865087998898/test-config.properties
+]]></system-err>
+  </testcase>
+  <testcase name="testDefaultValues" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.0">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=+tnGTlfWQH9J9cIO2QGkRQMc7WTy2YV73t615uIn6kM=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit4577726306122439520/test-config.properties
+]]></system-err>
+  </testcase>
+  <testcase name="testEnvironmentKeyConversion" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.001">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=p9wSI5sqXsucmsYfgznDM1sthEQWfoDNyJoPYsaQsOE=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=mPv1uh13U1i9ER1E5xnJpilwbQp1a3osVaxRxD0ko+w=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+]]></system-err>
+  </testcase>
+  <testcase name="testNonExistentConfigFile" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.003">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=nHnLTCUMheBOOkb/Mh32W6SvwR+c1GIFaLvyNV4dVBQ=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+]]></system-err>
+  </testcase>
+  <testcase name="testPropertyKeysRetrieval" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.0">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=xec3LkV04lr1Thqk8UTHJ6FwUgmd6brGdxBOEp+aQtY=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit78982788574506274/test-config.properties
+]]></system-err>
+  </testcase>
+  <testcase name="testFilePermissionValidation" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.005">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=e6Drm4PzZ+HGYu4ymCcxGI+4ruTuTABLrrLVeIbT57Y=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit8220262909347762502/test-config.properties
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=jaHZ6oYzIBtnRsJ2JUIs5ZrPQ1VWKg3qwoP/ou0v0ow=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+]]></system-err>
+  </testcase>
+  <testcase name="testRequiredProperty" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.0">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=AvqU/1TcZQHPPA3RIzAyws8jwGvcH+VUbb+MHAs/34g=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit9861781668322517419/test-config.properties
+]]></system-err>
+  </testcase>
+  <testcase name="testConfigurationSecurityValidation" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.002">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=VERymslAqK9wSg/4yagbciXjPioo09m0uU81hYlTMwY=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit15247560525413363949/test-config.properties
+]]></system-err>
+  </testcase>
+  <testcase name="testInvalidNumericValues" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.0">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=hRf5AeWiwUz9HaGSWBstqRx0l15pgF4yDTeMD7hnC0U=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit4259073809261077701/test-config.properties
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Invalid integer value for property InvalidNumber: notANumber, using default: 100
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Invalid long value for property InvalidNumber: notANumber, using default: 200
+]]></system-err>
+  </testcase>
+  <testcase name="testTypedProperties" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.003">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=94mWrqp4np6RrB/KtteI+CU802l4IcBQYnD5MUwT1pU=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit1787091453871417930/test-config.properties
+]]></system-err>
+  </testcase>
+  <testcase name="testEnvironmentVariableOverride" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.0">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=0bHDOjiaSJvtq/4z4M4frCgQyzZ1keVcsfJkM9DqskY=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit5580112934559067884/test-config.properties
+]]></system-err>
+  </testcase>
+  <testcase name="testEncryptionAndDecryption" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.002">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=/PbQ3aCdcz18aBEYSYBIR57oEDkZnOItWcFSfTIB4Jg=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+]]></system-err>
+  </testcase>
+  <testcase name="testEncryptionRoundTrip" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.002">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=zzgVjqgWxOK47Hqi+Zh5sZYoupmnB+0v6IqXQovEgY0=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+[main] INFO com.cdata.mcp.config.EnvironmentConfigurationProvider - Configuration loaded from: /var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/junit1091585719061969798/test-config.properties
+]]></system-err>
+  </testcase>
+  <testcase name="testIsEncryptedMethod" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.0">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=rK7wBMnj/rJzQIOEK/8gyFZCTzq/5MeC1TCflKeQWQE=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+]]></system-err>
+  </testcase>
+  <testcase name="testNullAndEmptyEncryption" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.0">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=kWiVqWFVXDASxcIIeO6bXBqQogX4OwFB8puPnrs3QKA=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+]]></system-err>
+  </testcase>
+  <testcase name="testMultipleEncryptionOperations" classname="com.cdata.mcp.tests.EnvironmentConfigurationTests" time="0.001">
+    <system-err><![CDATA[[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Generated new encryption key. Set environment variable MCP_CONFIG_ENCRYPTION_KEY=WPsyC2fdYisofu8LgaNpkhQFsQSky8ZfcD1izUtyAxw=
+[main] WARN com.cdata.mcp.config.EnvironmentConfigurationProvider - Store this key securely and remove from logs!
+]]></system-err>
+  </testcase>
+</testsuite>

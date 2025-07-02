@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.cdata.mcp.config.EnvironmentConfigurationProvider;
+import com.cdata.mcp.config.SecretManager;
+import com.cdata.mcp.config.ConfigurationSecurityReport;
+
 import static com.cdata.mcp.StringUtil.isNullOrEmpty;
 
 public class Config {
@@ -55,11 +59,57 @@ public class Config {
   private ConnectionManager connectionManager;
   private com.cdata.mcp.auth.AuthenticationManager authenticationManager;
   private com.cdata.mcp.transport.TlsConfiguration tlsConfiguration;
+  
+  // Enhanced configuration management
+  private EnvironmentConfigurationProvider envConfigProvider;
+  private SecretManager secretManager;
 
+  /**
+   * Loads configuration with environment variable and secrets support
+   * @param filepath Path to configuration file
+   * @throws IOException if configuration cannot be loaded
+   */
   public void load(String filepath) throws IOException {
-    try (FileInputStream fis = new FileInputStream(filepath)) {
-      props.load(fis);
+    // Initialize enhanced configuration providers
+    envConfigProvider = new EnvironmentConfigurationProvider();
+    secretManager = new SecretManager(envConfigProvider);
+    
+    // Load configuration with security validation
+    try {
+      envConfigProvider.loadConfiguration(filepath);
+      
+      // Migrate properties to enhanced provider (backward compatibility)
+      migrateToEnhancedConfiguration();
+      
+    } catch (SecurityException e) {
+      throw new IOException("Security validation failed: " + e.getMessage(), e);
     }
+  }
+  
+  /**
+   * Migrates existing properties to enhanced configuration for backward compatibility
+   */
+  private void migrateToEnhancedConfiguration() {
+    // Load legacy properties if they exist
+    try (FileInputStream fis = new FileInputStream(getConfigFilePath())) {
+      Properties legacyProps = new Properties();
+      legacyProps.load(fis);
+      
+      // Copy to internal properties for legacy access
+      for (String key : legacyProps.stringPropertyNames()) {
+        props.setProperty(key, legacyProps.getProperty(key));
+      }
+    } catch (Exception e) {
+      // Legacy file might not exist, continue with environment configuration
+    }
+  }
+  
+  /**
+   * Gets the configuration file path from environment or default
+   */
+  private String getConfigFilePath() {
+    return System.getenv("MCP_CONFIG_FILE") != null ? 
+           System.getenv("MCP_CONFIG_FILE") : "config.properties";
   }
 
   public boolean validate(PrintStream errors) {
@@ -142,18 +192,30 @@ public class Config {
     return "1.0";
   }
   public String getPrefix() {
+    if (envConfigProvider != null) {
+      return envConfigProvider.getProperty(PREFIX, null);
+    }
     return this.props.getProperty(PREFIX);
   }
   public String getMcpScheme() {
     return getPrefix() + "://";
   }
   public String getDriver() {
+    if (envConfigProvider != null) {
+      return envConfigProvider.getProperty(DRIVER, null);
+    }
     return this.props.getProperty(DRIVER);
   }
   public String getDriverJar() {
+    if (envConfigProvider != null) {
+      return envConfigProvider.getProperty(DRIVER_JAR, null);
+    }
     return this.props.getProperty(DRIVER_JAR);
   }
   public String getJdbcUrl() {
+    if (envConfigProvider != null) {
+      return envConfigProvider.getProperty(JDBC_URL, null);
+    }
     return this.props.getProperty(JDBC_URL);
   }
   public List<Table> getTables() throws SQLException {
@@ -184,6 +246,9 @@ public class Config {
   }
 
   public String getLogFile() {
+    if (envConfigProvider != null) {
+      return envConfigProvider.getProperty(LOG_FILE, null);
+    }
     return this.props.getProperty(LOG_FILE);
   }
   
@@ -192,6 +257,9 @@ public class Config {
    * @return true if authentication is required (default: false)
    */
   public boolean isAuthRequired() {
+    if (envConfigProvider != null) {
+      return envConfigProvider.getBooleanProperty(AUTH_REQUIRED, false);
+    }
     String value = this.props.getProperty(AUTH_REQUIRED, "false");
     return Boolean.parseBoolean(value);
   }
@@ -201,6 +269,9 @@ public class Config {
    * @return session timeout in minutes (default: 60)
    */
   public long getSessionTimeoutMinutes() {
+    if (envConfigProvider != null) {
+      return envConfigProvider.getLongProperty(SESSION_TIMEOUT_MINUTES, 60L);
+    }
     String value = this.props.getProperty(SESSION_TIMEOUT_MINUTES, "60");
     try {
       return Long.parseLong(value);
@@ -221,40 +292,85 @@ public class Config {
   }
   
   /**
-   * Creates TLS configuration from properties
+   * Creates TLS configuration from properties with enhanced security support
    * @return TLS configuration
    */
   private com.cdata.mcp.transport.TlsConfiguration createTlsConfiguration() {
     com.cdata.mcp.transport.TlsConfiguration config = new com.cdata.mcp.transport.TlsConfiguration();
     
-    // Basic TLS settings
-    config.setTlsEnabled(Boolean.parseBoolean(this.props.getProperty(TLS_ENABLED, "false")));
-    
-    if (config.isTlsEnabled()) {
-      // HTTPS port
-      String portStr = this.props.getProperty(HTTPS_PORT, "8443");
-      try {
-        config.setHttpsPort(Integer.parseInt(portStr));
-      } catch (NumberFormatException e) {
-        config.setHttpsPort(8443);
+    // Basic TLS settings using enhanced configuration
+    if (envConfigProvider != null) {
+      config.setTlsEnabled(envConfigProvider.getBooleanProperty(TLS_ENABLED, false));
+      
+      if (config.isTlsEnabled()) {
+        // HTTPS port
+        config.setHttpsPort(envConfigProvider.getIntProperty(HTTPS_PORT, 8443));
+        
+        // Keystore settings with potential secret management
+        config.setKeystorePath(getSecureProperty(KEYSTORE_PATH));
+        config.setKeystorePassword(getSecureProperty(KEYSTORE_PASSWORD));
+        config.setKeystoreType(envConfigProvider.getProperty(KEYSTORE_TYPE, "PKCS12"));
+        
+        // Truststore settings (optional)
+        config.setTruststorePath(getSecureProperty(TRUSTSTORE_PATH));
+        config.setTruststorePassword(getSecureProperty(TRUSTSTORE_PASSWORD));
+        config.setTruststoreType(envConfigProvider.getProperty(TRUSTSTORE_TYPE, "PKCS12"));
+        
+        // Client authentication
+        config.setClientAuthRequired(envConfigProvider.getBooleanProperty(CLIENT_AUTH_REQUIRED, false));
+        config.setClientAuthWanted(envConfigProvider.getBooleanProperty(CLIENT_AUTH_WANTED, false));
       }
+    } else {
+      // Fallback to legacy properties
+      config.setTlsEnabled(Boolean.parseBoolean(this.props.getProperty(TLS_ENABLED, "false")));
       
-      // Keystore settings
-      config.setKeystorePath(this.props.getProperty(KEYSTORE_PATH));
-      config.setKeystorePassword(this.props.getProperty(KEYSTORE_PASSWORD));
-      config.setKeystoreType(this.props.getProperty(KEYSTORE_TYPE, "PKCS12"));
-      
-      // Truststore settings (optional)
-      config.setTruststorePath(this.props.getProperty(TRUSTSTORE_PATH));
-      config.setTruststorePassword(this.props.getProperty(TRUSTSTORE_PASSWORD));
-      config.setTruststoreType(this.props.getProperty(TRUSTSTORE_TYPE, "PKCS12"));
-      
-      // Client authentication
-      config.setClientAuthRequired(Boolean.parseBoolean(this.props.getProperty(CLIENT_AUTH_REQUIRED, "false")));
-      config.setClientAuthWanted(Boolean.parseBoolean(this.props.getProperty(CLIENT_AUTH_WANTED, "false")));
+      if (config.isTlsEnabled()) {
+        // HTTPS port
+        String portStr = this.props.getProperty(HTTPS_PORT, "8443");
+        try {
+          config.setHttpsPort(Integer.parseInt(portStr));
+        } catch (NumberFormatException e) {
+          config.setHttpsPort(8443);
+        }
+        
+        // Keystore settings
+        config.setKeystorePath(this.props.getProperty(KEYSTORE_PATH));
+        config.setKeystorePassword(this.props.getProperty(KEYSTORE_PASSWORD));
+        config.setKeystoreType(this.props.getProperty(KEYSTORE_TYPE, "PKCS12"));
+        
+        // Truststore settings (optional)
+        config.setTruststorePath(this.props.getProperty(TRUSTSTORE_PATH));
+        config.setTruststorePassword(this.props.getProperty(TRUSTSTORE_PASSWORD));
+        config.setTruststoreType(this.props.getProperty(TRUSTSTORE_TYPE, "PKCS12"));
+        
+        // Client authentication
+        config.setClientAuthRequired(Boolean.parseBoolean(this.props.getProperty(CLIENT_AUTH_REQUIRED, "false")));
+        config.setClientAuthWanted(Boolean.parseBoolean(this.props.getProperty(CLIENT_AUTH_WANTED, "false")));
+      }
     }
     
     return config;
+  }
+  
+  /**
+   * Gets a secure property value, checking secrets management first
+   * @param key The property key
+   * @return The property value (from secrets or configuration)
+   */
+  private String getSecureProperty(String key) {
+    // Try to get from secret manager first
+    if (secretManager != null) {
+      try {
+        return secretManager.getSecret(key);
+      } catch (SecretManager.SecretNotFoundException e) {
+        // Fall back to configuration provider
+      }
+    }
+    
+    // Get from configuration provider
+    return envConfigProvider != null ? 
+           envConfigProvider.getProperty(key, null) : 
+           this.props.getProperty(key);
   }
 
   public String quoteIdentifier(String id) {
@@ -309,6 +425,67 @@ public class Config {
   }
   
   /**
+   * Gets the environment configuration provider
+   * @return The environment configuration provider
+   */
+  public EnvironmentConfigurationProvider getEnvironmentConfigProvider() {
+    return envConfigProvider;
+  }
+  
+  /**
+   * Gets the secret manager
+   * @return The secret manager
+   */
+  public SecretManager getSecretManager() {
+    return secretManager;
+  }
+  
+  /**
+   * Encrypts a configuration value for secure storage
+   * @param plainText The plain text value to encrypt
+   * @return Encrypted value suitable for configuration files
+   */
+  public String encryptConfigurationValue(String plainText) {
+    if (envConfigProvider == null) {
+      throw new IllegalStateException("Environment configuration provider not initialized");
+    }
+    return envConfigProvider.encryptValue(plainText);
+  }
+  
+  /**
+   * Validates the current configuration security
+   * @return Configuration security report
+   */
+  public ConfigurationSecurityReport validateConfigurationSecurity() {
+    ConfigurationSecurityReport report = new ConfigurationSecurityReport();
+    
+    // Check if sensitive values are encrypted
+    if (envConfigProvider != null) {
+      checkSensitiveProperty(KEYSTORE_PASSWORD, report);
+      checkSensitiveProperty(TRUSTSTORE_PASSWORD, report);
+      checkSensitiveProperty(JDBC_URL, report);
+    }
+    
+    // Check secret manager availability
+    if (secretManager != null) {
+      report.setSecretManagerAvailable(secretManager.isConfigured());
+      report.setAvailableProviders(secretManager.getAvailableProviders());
+    }
+    
+    return report;
+  }
+  
+  /**
+   * Checks if a sensitive property is properly secured
+   */
+  private void checkSensitiveProperty(String propertyName, ConfigurationSecurityReport report) {
+    String value = envConfigProvider.getProperty(propertyName, null);
+    if (value != null && !envConfigProvider.isEncrypted(value)) {
+      report.addUnsecuredProperty(propertyName);
+    }
+  }
+  
+  /**
    * Shuts down the connection manager and authentication manager
    */
   public void shutdown() {
@@ -317,6 +494,9 @@ public class Config {
     }
     if (authenticationManager != null) {
       authenticationManager.cleanupExpiredSessions();
+    }
+    if (secretManager != null) {
+      secretManager.clearCache();
     }
   }
 
