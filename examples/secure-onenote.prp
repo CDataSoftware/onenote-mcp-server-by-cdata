@@ -1,0 +1,25 @@
+# Secure OneNote MCP Server Configuration
+# This configuration enables authentication and other security features
+
+# Basic connection settings
+Prefix=onenote
+ServerName=CDataOneNote
+ServerVersion=1.0
+DriverPath=/path/to/cdata.jdbc.onenote.jar
+DriverClass=cdata.jdbc.onenote.OneNoteDriver
+JdbcUrl=jdbc:onenote:InitiateOAuth=GETANDREFRESH;
+Tables=
+
+# Authentication settings (NEW)
+AuthRequired=true
+SessionTimeoutMinutes=60
+
+# Logging settings
+LogFile=/var/log/mcp-server/onenote.log
+
+# Additional security notes:
+# - When AuthRequired=true, a default admin API key will be generated on first startup
+# - The API key will be logged to the console - store it securely!
+# - Create additional API keys using the admin key and revoke the default one
+# - Session timeout controls how long sessions remain active (in minutes)
+# - All sessions are cleaned up automatically when they expire

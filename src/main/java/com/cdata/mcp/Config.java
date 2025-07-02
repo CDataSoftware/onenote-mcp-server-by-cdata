@@ -25,6 +25,10 @@ public class Config {
   private static final String JDBC_URL = "JdbcUrl";
   private static final String TABLES = "Tables";
   private static final String LOG_FILE = "LogFile";
+  
+  // Authentication configuration
+  private static final String AUTH_REQUIRED = "AuthRequired";
+  private static final String SESSION_TIMEOUT_MINUTES = "SessionTimeoutMinutes";
 
   // following properties will be discovered dynamically from driver
   private static final String ID_QUOTE_OPEN_CHAR = "IDENTIFIER_QUOTE_OPEN_CHAR";
@@ -37,6 +41,7 @@ public class Config {
   private String defCatalog;
   private String defSchema;
   private ConnectionManager connectionManager;
+  private com.cdata.mcp.auth.AuthenticationManager authenticationManager;
 
   public void load(String filepath) throws IOException {
     try (FileInputStream fis = new FileInputStream(filepath)) {
@@ -168,6 +173,28 @@ public class Config {
   public String getLogFile() {
     return this.props.getProperty(LOG_FILE);
   }
+  
+  /**
+   * Gets whether authentication is required
+   * @return true if authentication is required (default: false)
+   */
+  public boolean isAuthRequired() {
+    String value = this.props.getProperty(AUTH_REQUIRED, "false");
+    return Boolean.parseBoolean(value);
+  }
+  
+  /**
+   * Gets the session timeout in minutes
+   * @return session timeout in minutes (default: 60)
+   */
+  public long getSessionTimeoutMinutes() {
+    String value = this.props.getProperty(SESSION_TIMEOUT_MINUTES, "60");
+    try {
+      return Long.parseLong(value);
+    } catch (NumberFormatException e) {
+      return 60; // Default fallback
+    }
+  }
 
   public String quoteIdentifier(String id) {
     String open = this.sqlInfo.getProperty(ID_QUOTE_OPEN_CHAR);
@@ -207,11 +234,28 @@ public class Config {
   }
   
   /**
-   * Shuts down the connection manager
+   * Gets the authentication manager instance
+   * @return The authentication manager
+   */
+  public com.cdata.mcp.auth.AuthenticationManager getAuthenticationManager() {
+    if (authenticationManager == null) {
+      authenticationManager = new com.cdata.mcp.auth.AuthenticationManager(
+          isAuthRequired(), 
+          getSessionTimeoutMinutes()
+      );
+    }
+    return authenticationManager;
+  }
+  
+  /**
+   * Shuts down the connection manager and authentication manager
    */
   public void shutdown() {
     if (connectionManager != null) {
       connectionManager.shutdown();
+    }
+    if (authenticationManager != null) {
+      authenticationManager.cleanupExpiredSessions();
     }
   }
 
