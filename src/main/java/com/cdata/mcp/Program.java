@@ -25,15 +25,42 @@ public class Program {
   public void init(String configPath) throws Exception {
     this.config = new Config();
     this.config.load(configPath);
-    if (!StringUtil.isNullOrEmpty(this.config.getLogFile())) {
-      System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
-      System.setProperty("org.slf4j.simpleLogger.logFile", this.config.getLogFile());
-    }
+    
+    // Configure secure logging
+    configureSecureLogging();
+    
     if (!this.config.validate(System.err)) {
       System.exit(-1);
     }
 
     this.transport = new StdioServerTransport(new ObjectMapper());
+  }
+  
+  private void configureSecureLogging() {
+    if (!StringUtil.isNullOrEmpty(this.config.getLogFile())) {
+      try {
+        // Validate log file path for security
+        SecurityValidator.validateLogPath(this.config.getLogFile());
+        
+        // Set logging properties securely
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "info"); // Changed from debug to info
+        System.setProperty("org.slf4j.simpleLogger.logFile", this.config.getLogFile());
+        System.setProperty("org.slf4j.simpleLogger.showDateTime", "true");
+        System.setProperty("org.slf4j.simpleLogger.dateTimeFormat", "yyyy-MM-dd HH:mm:ss");
+        System.setProperty("org.slf4j.simpleLogger.showThreadName", "false");
+        System.setProperty("org.slf4j.simpleLogger.showLogName", "true");
+        System.setProperty("org.slf4j.simpleLogger.showShortLogName", "true");
+        
+      } catch (SecurityException ex) {
+        System.err.println("Security validation failed for log file: " + ex.getMessage());
+        System.err.println("Logging to console instead");
+        // Fall back to console logging
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "info");
+      }
+    } else {
+      // Default to console logging with appropriate level
+      System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "info");
+    }
   }
 
   public void configureMcp() throws Exception {
@@ -69,14 +96,36 @@ public class Program {
     } else {
       Runtime.getRuntime().addShutdownHook(new Thread() {
         public void run() {
-          synchronized (p) {
-            p.notify();
+          System.err.println("Shutting down MCP server...");
+          try {
+            // Close the MCP server gracefully
+            if (p.mcpServer != null) {
+              p.mcpServer.closeGracefully();
+            }
+            
+            // Shutdown connection manager
+            if (p.config != null) {
+              p.config.shutdown();
+            }
+            
+            System.err.println("MCP server shutdown complete");
+          } catch (Exception e) {
+            System.err.println("Error during shutdown: " + e.getMessage());
+          } finally {
+            synchronized (p) {
+              p.notify();
+            }
           }
         }
       });
-      synchronized (p) {
-        p.wait();
-        p.mcpServer.closeGracefully();
+      
+      try {
+        synchronized (p) {
+          p.wait();
+        }
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        System.err.println("Main thread interrupted");
       }
     }
   }
