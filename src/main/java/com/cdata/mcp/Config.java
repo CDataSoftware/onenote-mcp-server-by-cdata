@@ -8,6 +8,7 @@ import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Driver;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,6 +25,10 @@ public class Config {
   private static final String JDBC_URL = "JdbcUrl";
   private static final String TABLES = "Tables";
   private static final String LOG_FILE = "LogFile";
+  
+  // Authentication configuration
+  private static final String AUTH_REQUIRED = "AuthRequired";
+  private static final String SESSION_TIMEOUT_MINUTES = "SessionTimeoutMinutes";
 
   // following properties will be discovered dynamically from driver
   private static final String ID_QUOTE_OPEN_CHAR = "IDENTIFIER_QUOTE_OPEN_CHAR";
@@ -35,6 +40,8 @@ public class Config {
   private Driver driver;
   private String defCatalog;
   private String defSchema;
+  private ConnectionManager connectionManager;
+  private com.cdata.mcp.auth.AuthenticationManager authenticationManager;
 
   public void load(String filepath) throws IOException {
     try (FileInputStream fis = new FileInputStream(filepath)) {
@@ -47,26 +54,71 @@ public class Config {
     if (isNullOrEmpty(getPrefix())) {
       errors.println("The '" + PREFIX + "' option is missing");
       result = false;
+    } else {
+      // Validate prefix for security
+      try {
+        SecurityValidator.validateStringInput(getPrefix(), PREFIX, 50);
+      } catch (SecurityException ex) {
+        errors.println("Security validation failed for " + PREFIX + ": " + ex.getMessage());
+        result = false;
+      }
     }
 
     if (isNullOrEmpty(getDriver())) {
       errors.println("The '" + DRIVER + "' option is missing");
       result = false;
+    } else {
+      // Validate driver class is allowlisted
+      try {
+        SecurityValidator.validateDriverClass(getDriver());
+      } catch (SecurityException ex) {
+        errors.println("Security validation failed for " + DRIVER + ": " + ex.getMessage());
+        result = false;
+      }
     }
 
     if (isNullOrEmpty(getDriverJar())) {
       errors.println("The '" + DRIVER_JAR + "' option is missing");
       result = false;
-    } else if (!verifyDriverLoad(errors)) {
-      result = false;
+    } else {
+      // Validate JAR file security
+      try {
+        SecurityValidator.validateJarFile(getDriverJar());
+      } catch (SecurityException ex) {
+        errors.println("Security validation failed for " + DRIVER_JAR + ": " + ex.getMessage());
+        result = false;
+      }
+      if (result && !verifyDriverLoad(errors)) {
+        result = false;
+      }
     }
 
     if (isNullOrEmpty(getJdbcUrl())) {
       errors.println("The '" + JDBC_URL + "' option is missing");
       result = false;
-    } else if (result && !verifyJdbcUrl(errors)) {
-      result = false;
+    } else {
+      // Validate JDBC URL for security
+      try {
+        SecurityValidator.validateStringInput(getJdbcUrl(), JDBC_URL, 1000);
+      } catch (SecurityException ex) {
+        errors.println("Security validation failed for " + JDBC_URL + ": " + ex.getMessage());
+        result = false;
+      }
+      if (result && !verifyJdbcUrl(errors)) {
+        result = false;
+      }
     }
+    
+    // Validate log file path if specified
+    if (!isNullOrEmpty(getLogFile())) {
+      try {
+        SecurityValidator.validateLogPath(getLogFile());
+      } catch (SecurityException ex) {
+        errors.println("Security validation failed for " + LOG_FILE + ": " + ex.getMessage());
+        result = false;
+      }
+    }
+    
     return result;
   }
 
@@ -121,16 +173,90 @@ public class Config {
   public String getLogFile() {
     return this.props.getProperty(LOG_FILE);
   }
+  
+  /**
+   * Gets whether authentication is required
+   * @return true if authentication is required (default: false)
+   */
+  public boolean isAuthRequired() {
+    String value = this.props.getProperty(AUTH_REQUIRED, "false");
+    return Boolean.parseBoolean(value);
+  }
+  
+  /**
+   * Gets the session timeout in minutes
+   * @return session timeout in minutes (default: 60)
+   */
+  public long getSessionTimeoutMinutes() {
+    String value = this.props.getProperty(SESSION_TIMEOUT_MINUTES, "60");
+    try {
+      return Long.parseLong(value);
+    } catch (NumberFormatException e) {
+      return 60; // Default fallback
+    }
+  }
 
   public String quoteIdentifier(String id) {
     String open = this.sqlInfo.getProperty(ID_QUOTE_OPEN_CHAR);
     String close = this.sqlInfo.getProperty(ID_QUOTE_CLOSE_CHAR);
-    // TODO: Properly escape things
-    return open + id + close;
+    
+    // Properly escape identifier by doubling the close quote character
+    String escapedId = id.replace(close, close + close);
+    return open + escapedId + close;
   }
 
   public Connection newConnection() throws SQLException {
     return this.driver.connect(this.getJdbcUrl(), new Properties());
+  }
+  
+  /**
+   * Gets a managed connection with security controls and resource limits
+   * @param clientId Identifier for the requesting client
+   * @return A managed database connection
+   * @throws SQLException if connection fails or limits are exceeded
+   */
+  public ManagedConnection getManagedConnection(String clientId) throws SQLException {
+    if (connectionManager == null) {
+      connectionManager = new ConnectionManager(this);
+    }
+    return connectionManager.getConnection(clientId);
+  }
+  
+  /**
+   * Gets the connection manager instance
+   * @return The connection manager
+   */
+  public ConnectionManager getConnectionManager() {
+    if (connectionManager == null) {
+      connectionManager = new ConnectionManager(this);
+    }
+    return connectionManager;
+  }
+  
+  /**
+   * Gets the authentication manager instance
+   * @return The authentication manager
+   */
+  public com.cdata.mcp.auth.AuthenticationManager getAuthenticationManager() {
+    if (authenticationManager == null) {
+      authenticationManager = new com.cdata.mcp.auth.AuthenticationManager(
+          isAuthRequired(), 
+          getSessionTimeoutMinutes()
+      );
+    }
+    return authenticationManager;
+  }
+  
+  /**
+   * Shuts down the connection manager and authentication manager
+   */
+  public void shutdown() {
+    if (connectionManager != null) {
+      connectionManager.shutdown();
+    }
+    if (authenticationManager != null) {
+      authenticationManager.cleanupExpiredSessions();
+    }
   }
 
   private boolean verifyDriverLoad(PrintStream errors) {
@@ -203,8 +329,10 @@ public class Config {
   }
 
   private void retrieveSqlInfo(Connection cn) throws SQLException {
-    try (Statement st = cn.createStatement()) {
-      try (ResultSet rs = st.executeQuery("SELECT NAME, VALUE FROM sys_sqlinfo")) {
+    // Use PreparedStatement for better security practices, even though query is static
+    String query = "SELECT NAME, VALUE FROM sys_sqlinfo";
+    try (PreparedStatement ps = cn.prepareStatement(query)) {
+      try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
           String key = rs.getString(1);
           String value = rs.getString(2);
