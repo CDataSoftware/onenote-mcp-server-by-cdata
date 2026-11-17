@@ -11,12 +11,37 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public class RunQueryTool implements ITool {
   private Config config;
   private Logger logger = LoggerFactory.getLogger(RunQueryTool.class);
+  
+  // SQL security validation patterns and allowlists
+  private static final Set<String> ALLOWED_KEYWORDS = new HashSet<>(Arrays.asList(
+      "SELECT", "FROM", "WHERE", "AND", "OR", "NOT", "IN", "LIKE", "IS", "NULL",
+      "ORDER", "BY", "GROUP", "HAVING", "LIMIT", "OFFSET", "TOP", "DISTINCT",
+      "INNER", "LEFT", "RIGHT", "FULL", "OUTER", "JOIN", "ON", "AS", "ASC", "DESC",
+      "UNION", "ALL", "CASE", "WHEN", "THEN", "ELSE", "END", "CAST", "CONVERT",
+      "COUNT", "SUM", "AVG", "MIN", "MAX", "UPPER", "LOWER", "TRIM", "SUBSTRING"
+  ));
+  
+  private static final Set<String> FORBIDDEN_KEYWORDS = new HashSet<>(Arrays.asList(
+      "INSERT", "UPDATE", "DELETE", "DROP", "CREATE", "ALTER", "TRUNCATE",
+      "EXEC", "EXECUTE", "CALL", "PROCEDURE", "FUNCTION", "DECLARE", "SET",
+      "GRANT", "REVOKE", "COMMIT", "ROLLBACK", "TRANSACTION", "MERGE", "UPSERT"
+  ));
+  
+  // Pattern to detect potentially dangerous SQL constructs
+  private static final Pattern DANGEROUS_PATTERNS = Pattern.compile(
+      "(?i)(;|--|/\\*|\\*/|xp_|sp_cmdshell|@@|char\\(|nchar\\(|ascii\\(|waitfor\\s+delay)",
+      Pattern.CASE_INSENSITIVE
+  );
 
   public RunQueryTool(Config config) {
     this.config = config;
@@ -50,7 +75,15 @@ public class RunQueryTool implements ITool {
   @Override
   public McpSchema.CallToolResult run(Map<String, Object> args) {
     String sql = (String)args.get("sql");
-    this.logger.info("RunQueryTool({})", sql);
+    
+    // Validate SQL before logging to prevent log injection
+    try {
+      validateSql(sql);
+    } catch (SecurityException ex) {
+      throw new RuntimeException("SECURITY_ERROR: " + ex.getMessage());
+    }
+    
+    this.logger.info("RunQueryTool - executing validated SELECT query");
     try {
       try (Connection cn = config.newConnection()) {
         List<McpSchema.Content> content = new ArrayList<>();
@@ -72,6 +105,74 @@ public class RunQueryTool implements ITool {
     try (Statement st = cn.createStatement()) {
       return CsvUtils.resultSetToCsv(st.executeQuery(sql));
     }
+  }
+
+  /**
+   * Validates SQL query to prevent injection attacks and ensure only SELECT operations
+   * @param sql The SQL query to validate
+   * @throws SecurityException if the SQL is deemed unsafe
+   */
+  private void validateSql(String sql) throws SecurityException {
+    if (sql == null || sql.trim().isEmpty()) {
+      throw new SecurityException("SQL query cannot be null or empty");
+    }
+
+    String normalizedSql = sql.trim().toUpperCase();
+    
+    // Must start with SELECT
+    if (!normalizedSql.startsWith("SELECT")) {
+      throw new SecurityException("Only SELECT statements are allowed");
+    }
+
+    // Check for dangerous patterns
+    if (DANGEROUS_PATTERNS.matcher(sql).find()) {
+      throw new SecurityException("SQL contains potentially dangerous constructs");
+    }
+
+    // Check for forbidden keywords
+    String[] tokens = normalizedSql.split("\\s+");
+    for (String token : tokens) {
+      String cleanToken = token.replaceAll("[^A-Z0-9_]", "");
+      if (FORBIDDEN_KEYWORDS.contains(cleanToken)) {
+        throw new SecurityException("Forbidden SQL keyword detected: " + cleanToken);
+      }
+    }
+
+    // Additional length check to prevent extremely long queries
+    if (sql.length() > 10000) {
+      throw new SecurityException("SQL query exceeds maximum allowed length");
+    }
+
+    // Check for multiple statements (basic check)
+    String withoutStrings = removeStringLiterals(sql);
+    if (withoutStrings.contains(";")) {
+      throw new SecurityException("Multiple SQL statements are not allowed");
+    }
+  }
+
+  /**
+   * Remove string literals from SQL to check for semicolons outside of strings
+   * @param sql The SQL query
+   * @return SQL with string literals removed
+   */
+  private String removeStringLiterals(String sql) {
+    StringBuilder result = new StringBuilder();
+    boolean inSingleQuote = false;
+    boolean inDoubleQuote = false;
+    
+    for (int i = 0; i < sql.length(); i++) {
+      char c = sql.charAt(i);
+      
+      if (c == '\'' && !inDoubleQuote) {
+        inSingleQuote = !inSingleQuote;
+      } else if (c == '"' && !inSingleQuote) {
+        inDoubleQuote = !inDoubleQuote;
+      } else if (!inSingleQuote && !inDoubleQuote) {
+        result.append(c);
+      }
+    }
+    
+    return result.toString();
   }
 
 }

@@ -8,6 +8,7 @@ import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Driver;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -125,8 +126,10 @@ public class Config {
   public String quoteIdentifier(String id) {
     String open = this.sqlInfo.getProperty(ID_QUOTE_OPEN_CHAR);
     String close = this.sqlInfo.getProperty(ID_QUOTE_CLOSE_CHAR);
-    // TODO: Properly escape things
-    return open + id + close;
+    
+    // Properly escape identifier by doubling the close quote character
+    String escapedId = id.replace(close, close + close);
+    return open + escapedId + close;
   }
 
   public Connection newConnection() throws SQLException {
@@ -203,8 +206,10 @@ public class Config {
   }
 
   private void retrieveSqlInfo(Connection cn) throws SQLException {
-    try (Statement st = cn.createStatement()) {
-      try (ResultSet rs = st.executeQuery("SELECT NAME, VALUE FROM sys_sqlinfo")) {
+    // Use PreparedStatement for better security practices, even though query is static
+    String query = "SELECT NAME, VALUE FROM sys_sqlinfo";
+    try (PreparedStatement ps = cn.prepareStatement(query)) {
+      try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
           String key = rs.getString(1);
           String value = rs.getString(2);
