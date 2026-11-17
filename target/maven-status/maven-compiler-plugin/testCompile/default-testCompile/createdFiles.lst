@@ -1,0 +1,10 @@
+com/cdata/mcp/tests/EnvironmentConfigurationTests.class
+com/cdata/mcp/tests/ConfigurationSecurityTests.class
+com/cdata/mcp/tests/SecretManagerTests.class
+com/cdata/mcp/tests/JsonSchemaBuilderTests.class
+com/cdata/mcp/tests/SecurityValidatorTests.class
+com/cdata/mcp/tests/AuthenticationManagerTests.class
+com/cdata/mcp/tests/CsvSecurityTests.class
+com/cdata/mcp/tests/RunQueryToolSecurityTests.class
+com/cdata/mcp/tests/TableTests.class
+com/cdata/mcp/tests/TlsConfigurationTests.class

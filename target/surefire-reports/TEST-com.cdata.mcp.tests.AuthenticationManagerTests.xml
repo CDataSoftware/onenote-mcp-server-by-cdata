@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.106" tests="16" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="23"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/test-classes:/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/classes:/Users/ravikalla/.m2/repository/io/modelcontextprotocol/sdk/mcp/0.8.1/mcp-0.8.1.jar:/Users/ravikalla/.m2/repository/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.17.0/jackson-databind-2.17.0.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.17.0/jackson-annotations-2.17.0.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.0/jackson-core-2.17.0.jar:/Users/ravikalla/.m2/repository/net/bytebuddy/byte-buddy/1.14.9/byte-buddy-1.14.9.jar:/Users/ravikalla/.m2/repository/io/projectreactor/reactor-core/3.7.0/reactor-core-3.7.0.jar:/Users/ravikalla/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-server/12.0.16/jetty-server-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-http/12.0.16/jetty-http-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-io/12.0.16/jetty-io-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/ee10/jetty-ee10-servlet/12.0.16/jetty-ee10-servlet-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-security/12.0.16/jetty-security-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-session/12.0.16/jetty-session-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-util/12.0.16/jetty-util-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-server/12.0.16/jetty-http2-server-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-common/12.0.16/jetty-http2-common-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-hpack/12.0.16/jetty-http2-hpack-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-alpn-server/12.0.16/jetty-alpn-server-12.0.16.jar:/Users/ravikalla/.m2/repository/jakarta/servlet/jakarta.servlet-api/6.0.0/jakarta.servlet-api-6.0.0.jar:/Users/ravikalla/.m2/repository/org/slf4j/slf4j-simple/2.0.16/slf4j-simple-2.0.16.jar:/Users/ravikalla/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/ravikalla/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="java.vm.specification.version" value="23"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home/lib"/>
+    <property name="sun.java.command" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/surefire/surefirebooter-20250702140529037_3.jar /Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/surefire 2025-07-02T14-05-29_000-jvmRun1 surefire-20250702140529037_1tmp surefire_0-20250702140529037_2tmp"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/test-classes:/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/classes:/Users/ravikalla/.m2/repository/io/modelcontextprotocol/sdk/mcp/0.8.1/mcp-0.8.1.jar:/Users/ravikalla/.m2/repository/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.17.0/jackson-databind-2.17.0.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.17.0/jackson-annotations-2.17.0.jar:/Users/ravikalla/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.0/jackson-core-2.17.0.jar:/Users/ravikalla/.m2/repository/net/bytebuddy/byte-buddy/1.14.9/byte-buddy-1.14.9.jar:/Users/ravikalla/.m2/repository/io/projectreactor/reactor-core/3.7.0/reactor-core-3.7.0.jar:/Users/ravikalla/.m2/repository/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-server/12.0.16/jetty-server-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-http/12.0.16/jetty-http-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-io/12.0.16/jetty-io-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/ee10/jetty-ee10-servlet/12.0.16/jetty-ee10-servlet-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-security/12.0.16/jetty-security-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-session/12.0.16/jetty-session-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-util/12.0.16/jetty-util-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-server/12.0.16/jetty-http2-server-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-common/12.0.16/jetty-http2-common-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/http2/jetty-http2-hpack/12.0.16/jetty-http2-hpack-12.0.16.jar:/Users/ravikalla/.m2/repository/org/eclipse/jetty/jetty-alpn-server/12.0.16/jetty-alpn-server-12.0.16.jar:/Users/ravikalla/.m2/repository/jakarta/servlet/jakarta.servlet-api/6.0.0/jakarta.servlet-api-6.0.0.jar:/Users/ravikalla/.m2/repository/org/slf4j/slf4j-simple/2.0.16/slf4j-simple-2.0.16.jar:/Users/ravikalla/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/ravikalla/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/Users/ravikalla"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2024-10-15"/>
+    <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="apple.awt.application.name" value="ForkedBooter"/>
+    <property name="surefire.real.class.path" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official/target/surefire/surefirebooter-20250702140529037_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.runtime.version" value="23.0.1+11-39"/>
+    <property name="user.name" value="ravikalla"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="15.5"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="localRepository" value="/Users/ravikalla/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="/var/folders/3n/_5sn289j6mx74d22p92f0p3h0000gn/T/"/>
+    <property name="java.version" value="23.0.1"/>
+    <property name="user.dir" value="/Users/ravikalla/Desktop/projects/onenote-mcp-server-official"/>
+    <property name="os.arch" value="aarch64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/ravikalla/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="23.0.1+11-39"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.class.version" value="67.0"/>
+  </properties>
+  <testcase name="testAuthenticationDisabled" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_bosI8FMSeuTYy9GEZXa701MxurMosaii9q6B_ERSjf0 (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: false, Session timeout: 10 minutes
+]]></system-err>
+  </testcase>
+  <testcase name="testDefaultAdminKeyCreation" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_q1lq_fzAmfUWcvHPQ35kyNR_baMjsPSyTq4YMrNNNyI (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+]]></system-err>
+  </testcase>
+  <testcase name="testExpiredApiKey" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_5llz9tYbL51cSsmN_fjj_O7BejxAMhdOyqeZr3uaF6w (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'expired-user' with role 'USER'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Authentication failed: Expired API key 'expired-user' from 127.0.0.1
+]]></system-err>
+  </testcase>
+  <testcase name="testInvalidSessionToken" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.001">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_Ho_4KhF_c_IggvUcjpBIwp30zVFsiEXqSpCalFF-a14 (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+]]></system-err>
+  </testcase>
+  <testcase name="testApiKeyRevocation" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_7LaU4n7tlbkwxwqKkLAKZ_kGF4ih9lLZiS_2-3Pciak (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'test-user' with role 'USER'
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication successful: User 'test-user' with role 'USER' from 127.0.0.1
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key revoked: 'test-user'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Authentication failed: Disabled API key 'test-user' from 127.0.0.1
+]]></system-err>
+  </testcase>
+  <testcase name="testFailedAuthenticationInvalidKey" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_BS3ROFOhj4X_gfOGXU5t68tmkIULdPpchhsSgrcA4ms (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Authentication failed: Invalid API key from 127.0.0.1
+]]></system-err>
+  </testcase>
+  <testcase name="testAuthenticationStats" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_weokK5jN9pUSwDa_09wjGTbug13V1u5iyACQnf4Dc_4 (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'user1' with role 'USER'
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'user2' with role 'ADMIN'
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'user3' with role 'USER'
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication successful: User 'user3' with role 'USER' from 127.0.0.1
+]]></system-err>
+  </testcase>
+  <testcase name="testSuccessfulAuthentication" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_e7aE-znesgS_4yxNxJtIrKai71e3GU-yCVCzoXzbA5A (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'test-user' with role 'USER'
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication successful: User 'test-user' with role 'USER' from 127.0.0.1
+]]></system-err>
+  </testcase>
+  <testcase name="testSessionValidation" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.001">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_imNc-APw0A-Fp6-qmtuRbbXdBMtJq4TrWzpaQ07jf3c (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'test-user' with role 'USER'
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication successful: User 'test-user' with role 'USER' from 127.0.0.1
+]]></system-err>
+  </testcase>
+  <testcase name="testRolePermissions" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_JJ-Rg4uL4b9oVrybRLcIkdjhjqeLc0HN7dPimfGdoNY (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+]]></system-err>
+  </testcase>
+  <testcase name="testFailedAuthenticationMissingKey" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_uDTT_dRg0JnPDcnt7pZ_aYRrWYqNki5N3VjGcbH_-7A (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Authentication failed: Missing API key from 127.0.0.1
+]]></system-err>
+  </testcase>
+  <testcase name="testRoleInclusion" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_Bq1n8F213HQa3pGYeQiDB1UmyxUIWkfz29zCUBHR6l0 (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+]]></system-err>
+  </testcase>
+  <testcase name="testSessionCleanup" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.101">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp__oysI3-i0bOzOWn4SB8whiEj8a-X0epo2cu-odPLWRE (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_-wVNLneNyvdGAVpHhJr0jS5GdcRTERGZxG678JOER2E (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 0 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'test-user' with role 'USER'
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication successful: User 'test-user' with role 'USER' from 127.0.0.1
+]]></system-err>
+  </testcase>
+  <testcase name="testSessionLogout" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.001">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_8pgIdf7GElil5u_cukQ6ru70G4ljCBIJzmmWs3lH9iI (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'test-user' with role 'USER'
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication successful: User 'test-user' with role 'USER' from 127.0.0.1
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Session logged out: User 'test-user' from 127.0.0.1
+]]></system-err>
+  </testcase>
+  <testcase name="testPermissionChecking" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.0">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_fnEsmmwt8txaitI5jiV6ApkSFr2JTTb6Y-sEDckfcqQ (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'test-user' with role 'USER'
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication successful: User 'test-user' with role 'USER' from 127.0.0.1
+]]></system-err>
+  </testcase>
+  <testcase name="testCreateApiKey" classname="com.cdata.mcp.tests.AuthenticationManagerTests" time="0.001">
+    <system-err><![CDATA[[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'default-admin' with role 'ADMIN'
+[main] WARN com.cdata.mcp.auth.AuthenticationManager - Created default admin API key. Key: mcp_59ED96ButdIyh-miJzEwuRno-SnyV3DgXOgTqv0WnAM (Store securely and change immediately!)
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - Authentication manager initialized - Required: true, Session timeout: 10 minutes
+[main] INFO com.cdata.mcp.auth.AuthenticationManager - API key created: 'test-user' with role 'USER'
+]]></system-err>
+  </testcase>
+</testsuite>
